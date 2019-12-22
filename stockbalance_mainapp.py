@@ -22,24 +22,21 @@ class soft_drinks(object):
         sd_DF=pd.DataFrame({"Item Name": sd_items,
                             "Quantity": sd_amounts,
                             "Status": sd_stats})
-        #stock_database.append_dataframe(sd_DF, "Soft Drinks")
-        sd_DF.to_sql(name="Soft Drinks", con=dbs, if_exists='append')
+        stock_database.append_dataframe(sd_DF, "Soft Drinks")
+        #sd_DF.to_sql(name="Soft Drinks", con=dbs, if_exists='append')     This line is repetitive of the above
         sd_DF.to_csv('C:/Users/HP/Documents/codingnprogramming/projects/stockbalance_app/Stockbalance(softdrinks).csv')
         dbs.commit()
-        soft_drinks.load_table()
+        #soft_drinks.load_table()
 
-        #print(sd_DF)
-        #pass
     def create_column(clmnName):
         sd_DF.insert(clmnName)
-        #pass
+
     def add_item(itemName, itemQnty, itemStat):
         sd_items.append(itemName)
         sd_amounts.append(itemQnty)
         sd_stats.append(itemStat)
         soft_drinks.create_table()
 
-        #pass
     def subtract_item():
         pass
     def check_balance():
@@ -49,8 +46,18 @@ class soft_drinks(object):
     def show_table():
         print(sd_DF)
     def load_table():
-        pd.read_csv('C:/Users/HP/Documents/codingnprogramming/projects/stockbalance_app/Stockbalance(softdrinks).csv')
+        readCSV=pd.read_csv('C:/Users/HP/Documents/codingnprogramming/projects/stockbalance_app/Stockbalance(softdrinks).csv')
         print("CSV table loaded successfully")
+        print(readCSV)
+        itm = readCSV.at[0,'Item Name']
+        qntty=readCSV.at[0,'Quantity']
+        for items in itm:
+            sd_items.append(items)
+        for items in qntty:
+            sd_amounts.append(items)
+        print(sd_items)
+        print(sd_amounts)
+
 
 
 class spices(object):
@@ -113,28 +120,25 @@ class dry_goods(object):
         pass
 
 class alcoholic_drinks(object):
-    global sd_items
-    global sd_amounts
-    global sd_stats
+    global ad_items
+    global ad_amounts
+    global ad_stats
 
-    sd_items=[]
-    sd_amounts=[]
-    sd_stats=[]
+    ad_items=[]
+    ad_amounts=[]
+    ad_stats=[]
     def create_table():
-        global sd_DF
-        sd_DF=pd.DataFrame({"Item Name": sd_items,
-                            "Quantity": sd_amounts,
-                            "Status": sd_stats})
-
-        #print(sd_DF)
-        #pass
+        global ad_DF
+        ad_DF=pd.DataFrame({"Item Name": ad_items,
+                            "Quantity": ad_amounts,
+                            "Status": ad_stats})
     def create_column(clmnName):
-        sd_DF.insert(clmnName)
+        ad_DF.insert(clmnName)
         #pass
     def add_item(itemName, itemQnty, itemStat):
-        sd_items.append(itemName)
-        sd_amounts.append(itemQnty)
-        sd_stats.append(itemStat)
+        ad_items.append(itemName)
+        ad_amounts.append(itemQnty)
+        ad_stats.append(itemStat)
         soft_drinks.create_table()
     def subtract_item():
         pass
@@ -146,27 +150,22 @@ class alcoholic_drinks(object):
 class stock_database(object):
     global dbs
     global fdb
-    if os.path.isfile('C:/Users/HP/Documents/codingnprogramming/projects/stockbalance_app/StockbalanceDB.db'):
+    dbpath='C:/Users/HP/Documents/codingnprogramming/projects/stockbalance_app/StockbalanceDB.db'
+    if os.path.isfile(dbpath):
         print('Database loaded')
-        dbs = sqlite3.connect('C:/Users/HP/Documents/codingnprogramming/projects/pyprojects/School Database/StockbalanceDB.db')
-        #fdb=open('C:/Users/HP/Documents/codingnprogramming/projects/stockbalance_app/StockbalanceDB.db', "w+")
+        dbs = sqlite3.connect(dbpath)
     else:
-        #fdb=open('C:/Users/HP/Documents/codingnprogramming/projects/stockbalance_app/StockbalanceDB.db', "w+")
         print('Creating database')
-        dbs = sqlite3.connect('C:/Users/HP/Documents/codingnprogramming/projects/pyprojects/School Database/StockbalanceDB.db')
-        #dbs.execute("create table company(Name, text);")
-
-
+        dbs = sqlite3.connect(dbpath)
     def append_dataframe(dfName, tableName):
-
-        #pd.DataFrame.to_sql(dfName, name=tableName, con=db, if_exists='append')
+        pd.DataFrame.to_sql(dfName, name=tableName, con=dbs, if_exists='append')
         dbs.commit()
         print("saved successfully")
-        #pass
+
 class stock_csv(object):
     def append_toCSV(self):
         pass
 
-soft_drinks.add_item("sprite", 30, "good")
+soft_drinks.add_item("coke", 30, "good")
 dry_goods.add_item("EXE flour", 20, "good")
 #soft_drinks.show_table()
